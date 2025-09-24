@@ -4,14 +4,12 @@ body {
   background: #f8f9fa;
   color: #333;
 }
-
 header {
-  background: #6200ea;
+  background: #e75c3c;
   color: white;
   padding: 1rem;
   text-align: center;
 }
-
 .tab-bar {
   display: flex;
   justify-content: space-around;
@@ -21,7 +19,6 @@ header {
   bottom: 0;
   width: 100%;
 }
-
 .tab-bar button {
   flex: 1;
   padding: 1rem;
@@ -29,19 +26,16 @@ header {
   background: none;
   font-size: 16px;
 }
-
 .tab {
   display: none;
   padding: 1rem;
-  margin-bottom: 4rem; /* для таббара */
+  margin-bottom: 4rem;
 }
-
 .tab.active {
   display: block;
 }
-
 button {
-  background: #6200ea;
+  background: #e75c3c;
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;
@@ -49,16 +43,13 @@ button {
   border-radius: 6px;
   cursor: pointer;
 }
-
 button:hover {
-  background: #4500b5;
+  background: #c34a2f;
 }
-
 ul {
   list-style: none;
   padding: 0;
 }
-
 ul li {
   background: white;
   margin: 0.5rem 0;
@@ -66,8 +57,6 @@ ul li {
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
-/* Модалки */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -75,9 +64,7 @@ ul li {
   background: rgba(0,0,0,0.6);
   display: flex; align-items: center; justify-content: center;
 }
-
 .modal.hidden { display: none; }
-
 .modal-content {
   background: white;
   padding: 1.5rem;
