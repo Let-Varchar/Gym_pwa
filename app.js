@@ -53,6 +53,7 @@ function renderPlans() {
       editPlan(plan.id);
     };
     li.appendChild(editBtn);
+    li.onclick = () => viewPlan(plan.id);
     planList.appendChild(li);
   });
 }
@@ -96,7 +97,7 @@ function editExercise(exId) {
   `);
 }
 
-// Просмотр упражнения (карточка)
+// Просмотр упражнения (карточка + трекинг)
 function viewExercise(exId) {
   const ex = exercises.find(e => e.id === exId);
   openModal(ex.name, (form) => {
@@ -152,6 +153,40 @@ function editPlan(planId) {
   `);
 }
 
+// Просмотр плана с возможностью трекинга упражнений
+function viewPlan(planId) {
+  const plan = plans.find(p => p.id === planId);
+  openModal(plan.title, null, `
+    <h4>Упражнения:</h4>
+    <ul>
+      ${plan.exercises.map(exId => {
+        const ex = exercises.find(e => e.id === exId);
+        return `<li onclick="trackExercise(${exId})">${ex.name}</li>`;
+      }).join("")}
+    </ul>
+  `);
+}
+
+// Трекинг подходов в упражнении внутри плана
+function trackExercise(exId) {
+  const ex = exercises.find(e => e.id === exId);
+  openModal(ex.name, (form) => {
+    const weight = form.querySelector("#weight").value;
+    const reps = form.querySelector("#reps").value;
+    const date = new Date().toLocaleDateString("ru-RU");
+
+    journal.push({ exerciseId: exId, date, weight, reps });
+    saveData();
+    renderJournal();
+  }, `
+    <p>${ex.description || ""}</p>
+    ${ex.media ? `<img class="exercise-media" src="${ex.media}"/>` : ""}
+    <input id="weight" type="number" placeholder="Вес (кг)"/>
+    <input id="reps" type="number" placeholder="Повторы"/>
+    <button type="submit">Добавить подход</button>
+  `);
+}
+
 // Журнал
 function renderJournal() {
   const journalDiv = document.getElementById("journalEntries");
@@ -185,7 +220,7 @@ function openModal(title, onSubmit, formFields) {
   modal.classList.remove("hidden");
   modalForm.onsubmit = (e) => {
     e.preventDefault();
-    onSubmit(modalForm);
+    if (onSubmit) onSubmit(modalForm);
     modal.classList.add("hidden");
   };
 }
