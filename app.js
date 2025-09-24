@@ -29,7 +29,14 @@ function renderExercises() {
   exercises.forEach(ex => {
     const li = document.createElement("li");
     li.innerHTML = `<span>${ex.name}</span>`;
-    li.onclick = () => openExerciseDetail(ex.id);
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.onclick = (e) => {
+      e.stopPropagation();
+      editExercise(ex.id);
+    };
+    li.appendChild(editBtn);
+    li.onclick = () => viewExercise(ex.id);
     exerciseList.appendChild(li);
   });
 }
@@ -69,6 +76,46 @@ document.getElementById("addExerciseBtn").addEventListener("click", () => {
   `);
 });
 
+// Редактирование упражнения
+function editExercise(exId) {
+  const ex = exercises.find(e => e.id === exId);
+  openModal("Редактировать упражнение", (form) => {
+    ex.name = form.querySelector("#name").value;
+    ex.description = form.querySelector("#desc").value;
+    const file = form.querySelector("#media").files[0];
+    if (file) {
+      ex.media = URL.createObjectURL(file);
+    }
+    saveData();
+    renderExercises();
+  }, `
+    <input id="name" value="${ex.name}" required/>
+    <textarea id="desc">${ex.description || ""}</textarea>
+    <input type="file" id="media" accept="image/*,video/*,.gif"/>
+    <button type="submit">Сохранить</button>
+  `);
+}
+
+// Просмотр упражнения (карточка)
+function viewExercise(exId) {
+  const ex = exercises.find(e => e.id === exId);
+  openModal(ex.name, (form) => {
+    const weight = form.querySelector("#weight").value;
+    const reps = form.querySelector("#reps").value;
+    const date = new Date().toLocaleDateString("ru-RU");
+
+    journal.push({ exerciseId: exId, date, weight, reps });
+    saveData();
+    renderJournal();
+  }, `
+    <p>${ex.description || ""}</p>
+    ${ex.media ? `<img class="exercise-media" src="${ex.media}"/>` : ""}
+    <input id="weight" type="number" placeholder="Вес (кг)"/>
+    <input id="reps" type="number" placeholder="Повторы"/>
+    <button type="submit">Добавить подход</button>
+  `);
+}
+
 // Добавление плана
 document.getElementById("addPlanBtn").addEventListener("click", () => {
   openModal("Создать план", (form) => {
@@ -82,6 +129,7 @@ document.getElementById("addPlanBtn").addEventListener("click", () => {
   `);
 });
 
+// Редактирование плана
 function editPlan(planId) {
   const plan = plans.find(p => p.id === planId);
   openModal("Редактировать план", (form) => {
@@ -101,26 +149,6 @@ function editPlan(planId) {
       </label>
     `).join("<br>")}
     <button type="submit">Сохранить</button>
-  `);
-}
-
-// Детали упражнения и трекинг
-function openExerciseDetail(exId) {
-  const ex = exercises.find(e => e.id === exId);
-  openModal(ex.name, (form) => {
-    const weight = form.querySelector("#weight").value;
-    const reps = form.querySelector("#reps").value;
-    const date = new Date().toLocaleDateString("ru-RU");
-
-    journal.push({ exerciseId: exId, date, weight, reps });
-    saveData();
-    renderJournal();
-  }, `
-    <p>${ex.description || ""}</p>
-    ${ex.media ? `<img class="exercise-media" src="${ex.media}"/>` : ""}
-    <input id="weight" type="number" placeholder="Вес (кг)"/>
-    <input id="reps" type="number" placeholder="Повторы"/>
-    <button type="submit">Добавить подход</button>
   `);
 }
 
