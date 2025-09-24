@@ -1,35 +1,51 @@
-<main id="app">
-  <nav class="tab-bar">
-    <button data-tab="exercises">Упражнения</button>
-    <button data-tab="plans">Планы</button>
-    <button data-tab="journal">Журнал</button>
-    <button data-tab="profile">Профиль</button>
-  </nav>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gym Tracker</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>🏋️ Gym Tracker</h1>
+  </header>
 
-  <!-- Экран упражнений -->
-  <section id="exercises" class="tab active">
-    <h2>Все упражнения</h2>
-    <ul id="exerciseList"></ul>
-    <button id="addExerciseBtn">➕ Добавить упражнение</button>
-  </section>
+  <main id="app">
+    <nav class="tab-bar">
+      <button data-tab="plans" class="active">Планы</button>
+      <button data-tab="exercises">Упражнения</button>
+      <button data-tab="journal">Журнал</button>
+    </nav>
 
-  <!-- Экран планов -->
-  <section id="plans" class="tab">
-    <h2>Планы тренировок</h2>
-    <ul id="planList"></ul>
-    <button id="addPlanBtn">➕ Добавить план</button>
-    <div id="screen"></div> <!-- тут будут рендериться планы/упражнения -->
-  </section>
+    <!-- Экран планов -->
+    <section id="plans" class="tab active">
+      <h2>Планы тренировок</h2>
+      <form id="planForm">
+        <input type="text" id="planTitle" placeholder="Название плана" required/>
+        <button type="submit">➕ Добавить план</button>
+      </form>
+      <ul id="planList"></ul>
+      <div id="screen"></div>
+    </section>
 
-  <!-- Экран журнала -->
-  <section id="journal" class="tab">
-    <h2>Журнал</h2>
-    <div id="journalEntries"></div>
-  </section>
+    <!-- Экран упражнений -->
+    <section id="exercises" class="tab">
+      <h2>Все упражнения</h2>
+      <form id="exerciseForm">
+        <input type="text" id="exerciseName" placeholder="Название упражнения" required/>
+        <button type="submit">➕ Добавить упражнение</button>
+      </form>
+      <ul id="exerciseList"></ul>
+    </section>
 
-  <!-- Экран профиля -->
-  <section id="profile" class="tab">
-    <h2>Профиль</h2>
-    <p>Твой личный аккаунт 💪</p>
-  </section>
-</main>
+    <!-- Экран журнала -->
+    <section id="journal" class="tab">
+      <h2>Журнал</h2>
+      <div id="journalEntries"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
