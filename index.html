@@ -1,53 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gym Tracker</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="manifest" href="manifest.json"/>
-</head>
-<body>
-  <header>
-    <h1>🏋️ Gym Tracker</h1>
-  </header>
-
-  <main id="app">
-    <nav class="tab-bar">
-      <button data-tab="exercises">Упражнения</button>
-      <button data-tab="plans">Планы</button>
-      <button data-tab="journal">Журнал</button>
-      <button data-tab="profile">Профиль</button>
-    </nav>
-
-    <!-- Экран упражнений -->
-    <section id="exercises" class="tab active">
-      <h2>Все упражнения</h2>
-      <ul id="exerciseList"></ul>
-      <button id="addExerciseBtn">➕ Добавить упражнение</button>
-    </section>
-
-    <!-- Экран планов -->
-    <section id="plans" class="tab">
-      <h2>Планы тренировок</h2>
-      <ul id="planList"></ul>
-      <button id="addPlanBtn">➕ Добавить план</button>
-    </section>
-
-    <!-- Экран журнала -->
-    <section id="journal" class="tab">
-      <h2>Журнал</h2>
-      <div id="journalEntries"></div>
-    </section>
-
-    <!-- Экран профиля -->
-    <section id="profile" class="tab">
-      <h2>Профиль</h2>
-      <p>Твой личный аккаунт 💪</p>
-    </section>
-  </main>
-
-  <main id="app">
+<main id="app">
   <nav class="tab-bar">
     <button data-tab="exercises">Упражнения</button>
     <button data-tab="plans">Планы</button>
@@ -82,8 +33,3 @@
     <p>Твой личный аккаунт 💪</p>
   </section>
 </main>
-
-
-  <script src="app.js"></script>
-</body>
-</html>
