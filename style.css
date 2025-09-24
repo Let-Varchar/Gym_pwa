@@ -80,3 +80,16 @@ img.exercise-media {
   border-radius: 6px;
   margin: 0.5rem 0;
 }
+.modal-content {
+  max-height: 90vh;      /* ограничиваем высоту */
+  overflow-y: auto;      /* скролл если не помещается */
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
