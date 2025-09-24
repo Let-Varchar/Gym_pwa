@@ -13,7 +13,9 @@ const tabs = document.querySelectorAll(".tab");
 const tabButtons = document.querySelectorAll(".tab-bar button");
 tabButtons.forEach(btn => {
   btn.addEventListener("click", () => {
+    tabButtons.forEach(b => b.classList.remove("active"));
     tabs.forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
     document.getElementById(btn.dataset.tab).classList.add("active");
     if (btn.dataset.tab === "journal") renderJournal();
   });
@@ -29,42 +31,70 @@ function renderExercises() {
   exercises.sort((a, b) => a.name.localeCompare(b.name));
   exercises.forEach(ex => {
     const li = document.createElement("li");
-    li.innerHTML = `<span>${ex.name}</span>`;
+    li.textContent = ex.name;
     exerciseList.appendChild(li);
   });
 }
+
+document.getElementById("exerciseForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("exerciseName").value.trim();
+  if (name) {
+    exercises.push({ id: Date.now(), name, description: "", media: "" });
+    saveData();
+    renderExercises();
+    e.target.reset();
+  }
+});
 
 // ------------------- Планы -------------------
 function renderPlans() {
   planList.innerHTML = "";
   plans.forEach(plan => {
     const li = document.createElement("li");
-    li.innerHTML = `<span>${plan.title}</span>`;
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "✏️";
-    editBtn.onclick = (e) => {
-      e.stopPropagation();
-      editPlan(plan.id);
-    };
-    li.appendChild(editBtn);
-
+    li.textContent = plan.title;
     li.onclick = () => viewPlan(plan.id);
     planList.appendChild(li);
   });
 }
+
+document.getElementById("planForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const title = document.getElementById("planTitle").value.trim();
+  if (title) {
+    plans.push({ id: Date.now(), title, exercises: [] });
+    saveData();
+    renderPlans();
+    e.target.reset();
+  }
+});
 
 // Экран конкретного плана
 function viewPlan(planId) {
   const plan = plans.find(p => p.id === planId);
   screen.innerHTML = `
     <h3>${plan.title}</h3>
+    <h4>Упражнения:</h4>
     <ul>
       ${plan.exercises.map(exId => {
         const ex = exercises.find(e => e.id === exId);
         return `<li onclick="viewExercise(${exId}, ${planId})">${ex.name}</li>`;
       }).join("") || "<p>Нет упражнений</p>"}
     </ul>
+    <h4>Добавить упражнение:</h4>
+    ${exercises.map(ex => `
+      <button onclick="addExerciseToPlan(${ex.id}, ${planId})">${ex.name}</button>
+    `).join(" ")}
   `;
+}
+
+function addExerciseToPlan(exId, planId) {
+  const plan = plans.find(p => p.id === planId);
+  if (!plan.exercises.includes(exId)) {
+    plan.exercises.push(exId);
+    saveData();
+    viewPlan(planId);
+  }
 }
 
 // Экран конкретного упражнения внутри плана
@@ -72,8 +102,6 @@ function viewExercise(exId, planId) {
   const ex = exercises.find(e => e.id === exId);
   screen.innerHTML = `
     <h3>${ex.name}</h3>
-    <p>${ex.description || ""}</p>
-    ${ex.media ? `<img class="exercise-media" src="${ex.media}"/>` : ""}
     <input id="weight" type="number" placeholder="Вес (кг)"/>
     <input id="reps" type="number" placeholder="Повторы"/>
     <button onclick="addSet(${exId}, ${planId})">➕ Добавить подход</button>
@@ -82,7 +110,6 @@ function viewExercise(exId, planId) {
   `;
 }
 
-// Добавление подхода
 function addSet(exId, planId) {
   const weight = document.getElementById("weight").value;
   const reps = document.getElementById("reps").value;
@@ -94,7 +121,7 @@ function addSet(exId, planId) {
   viewExercise(exId, planId); // перерисовать экран
 }
 
-// Журнал по упражнению
+// ------------------- Журнал -------------------
 function renderExerciseJournal(exId) {
   let html = "";
   const grouped = {};
@@ -111,7 +138,6 @@ function renderExerciseJournal(exId) {
   return html || "<p>Нет записей</p>";
 }
 
-// ------------------- Журнал -------------------
 function renderJournal() {
   const journalDiv = document.getElementById("journalEntries");
   journalDiv.innerHTML = "";
@@ -132,25 +158,6 @@ function renderJournal() {
     journalDiv.appendChild(block);
   }
 }
-
-// ------------------- Добавление -------------------
-document.getElementById("addExerciseBtn").addEventListener("click", () => {
-  const name = prompt("Название упражнения:");
-  if (name) {
-    exercises.push({ id: Date.now(), name, description: "", media: "" });
-    saveData();
-    renderExercises();
-  }
-});
-
-document.getElementById("addPlanBtn").addEventListener("click", () => {
-  const title = prompt("Название плана:");
-  if (title) {
-    plans.push({ id: Date.now(), title, exercises: [] });
-    saveData();
-    renderPlans();
-  }
-});
 
 // ------------------- Старт -------------------
 renderExercises();
